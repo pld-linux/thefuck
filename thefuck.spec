@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_with	tests	# do not perform "make test"
+
 Summary:	App that corrects your previous console command
 Name:		thefuck
 Version:	3.2
@@ -7,18 +11,20 @@ Group:		Applications/Shells
 Source0:	https://github.com/nvbn/thefuck/archive/%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	b2012c223a0ae15cecaa384aa8bbae32
 URL:		https://github.com/nvbn/thefuck
-BuildRequires:	python3-colorama
-BuildRequires:	python3-decorator
-BuildRequires:	python3-devel
-BuildRequires:	python3-mock
+BuildRequires:	python3-devel >= 1:3.4
 BuildRequires:	python3-pip
-BuildRequires:	python3-psutil
-BuildRequires:	python3-pytest
 BuildRequires:	python3-setuptools
-BuildRequires:	python3-six
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 BuildRequires:	sed >= 4.0
+%if %{with tests}
+BuildRequires:	python3-colorama
+BuildRequires:	python3-decorator
+BuildRequires:	python3-mock
+BuildRequires:	python3-psutil
+BuildRequires:	python3-pytest
+BuildRequires:	python3-six
+%endif
 Requires:	python3
 Requires:	python3-colorama
 Requires:	python3-psutil
@@ -37,7 +43,7 @@ See README.md how to setup for your shell.
 sed -i -e '/^#!\//, 1d' *.py
 
 %build
-%py3_build
+%py3_build %{?with_tests:test}
 
 %install
 rm -rf $RPM_BUILD_ROOT
