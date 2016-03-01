@@ -32,6 +32,9 @@ Requires:	python3-six
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# provided by python3.spec
+%define	_noautoreq_py3egg pathlib
+
 %description
 This application corrects your previous console command.
 
